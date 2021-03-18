@@ -4,16 +4,16 @@ import { getDatabaseCart, processOrder, removeFromDatabaseCart } from '../../uti
 import Cart from '../Cart/Cart';
 import ReviewItem from '../ReviewItem/ReviewItem';
 import happyImage from '../../images/giphy.gif';
+import { useHistory } from 'react-router';
 
 const Review = () => {
-    
+
     const [cart, setCart] = useState([]);
     const [orderPlaced, setOrderPlaced] = useState(false);
+    const history = useHistory()
 
-    const handlePlaceOrder = () =>{
-        setCart ([]);
-        setOrderPlaced(true);
-        processOrder();
+    const handleProceedCheckout = () => {
+        history.push('/shipment');
     }
 
     const removeProduct = (productKey) => {
@@ -21,8 +21,8 @@ const Review = () => {
         setCart(newCart);
         removeFromDatabaseCart(productKey);
     }
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         //cart
         const savedCart = getDatabaseCart();
         const productKeys = Object.keys(savedCart);
@@ -36,23 +36,23 @@ const Review = () => {
     })
 
     let thankyou;
-    if(orderPlaced) {
-        thankyou = <img src={happyImage} alt=""/>
+    if (orderPlaced) {
+        thankyou = <img src={happyImage} alt="" />
     }
     return (
         <div className="twin-container">
             <div className="product-container">
                 {
-                    cart.map(pd=> <ReviewItem
+                    cart.map(pd => <ReviewItem
                         key={pd.key}
-                        removeProduct = {removeProduct}
+                        removeProduct={removeProduct}
                         product={pd}></ReviewItem>)
                 }
                 {thankyou}
             </div>
             <div className="cart-container">
                 <Cart cart={cart}>
-                    <button onClick={handlePlaceOrder} className="main-button">Place Order</button>
+                    <button onClick={handleProceedCheckout} className="main-button">Proceed Checkout</button>
                 </Cart>
             </div>
         </div>
